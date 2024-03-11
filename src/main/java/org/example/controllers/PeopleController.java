@@ -71,10 +71,11 @@ public class PeopleController {
         return "redirect:/people";
     }
 
-    @DeleteMapping("/{id}/delete")
+    @PostMapping("/{id}/delete")
     public String deletePerson(@PathVariable("id") int id) throws SQLException {
         personDAO.delete(id);
         return "redirect:/people";
+
     }
 
 }
