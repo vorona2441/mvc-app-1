@@ -59,7 +59,7 @@ public class PeopleController {
         return "people/edit";
     }
 
-    @PostMapping("/{id}")
+    @PatchMapping("/{id}")
     public String updatePerson(@ModelAttribute("person") @Valid Person person,
                                BindingResult bindingResult,
                                @PathVariable("id") int id) {
@@ -70,7 +70,7 @@ public class PeopleController {
         return "redirect:/people";
     }
 
-    @PostMapping("/{id}/delete")
+    @DeleteMapping("/{id}/delete")
     public String deletePerson(@PathVariable("id") int id) {
         personDAO.delete(id);
         return "redirect:/people";
