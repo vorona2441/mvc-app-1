@@ -3,7 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .src/main/
-/src/main/resources/database.properties
+*.properties
 
 ### IntelliJ IDEA ###
 idea/
