@@ -18,6 +18,10 @@
     <input th:type="text" th:field="*{email}" id="email"/>
     <div style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</div>
     <br>
+    <label for="address">Address (Страна, Город, индекс (6 цифр)) = </label>
+    <input th:type="text" th:field="*{address}" id="address"/>
+    <div style="color: red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Error</div>
+    <br>
     <input th:type="submit" value="Update!"/>
 </form>
 </body>

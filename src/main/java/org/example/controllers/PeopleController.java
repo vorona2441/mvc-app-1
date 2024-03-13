@@ -3,6 +3,7 @@ package org.example.controllers;
 import jakarta.validation.Valid;
 import org.example.dao.PersonDAO;
 import org.example.models.Person;
+import org.example.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.*;
 public class PeopleController {
 
     private final PersonDAO personDAO;
+    private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO) {
+    public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
         this.personDAO = personDAO;
+        this.personValidator = personValidator;
     }
 
     @GetMapping()
@@ -34,7 +37,6 @@ public class PeopleController {
         model.addAttribute("person", personDAO.show(id));
         System.out.println(personDAO.show(id));
         return "people/show";
-
     }
 
     @GetMapping("/new")
@@ -46,6 +48,7 @@ public class PeopleController {
     @PostMapping()
     public String createPerson(@ModelAttribute("person") @Valid Person person,
                                BindingResult bindingResult) {    // bindingResult должен идти следующим аргументом после @Valid
+        personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
             return "people/new";
         }
@@ -63,6 +66,7 @@ public class PeopleController {
     public String updatePerson(@ModelAttribute("person") @Valid Person person,
                                BindingResult bindingResult,
                                @PathVariable("id") int id) {
+
         if (bindingResult.hasErrors()) {
             return "people/edit";
         }
@@ -74,7 +78,5 @@ public class PeopleController {
     public String deletePerson(@PathVariable("id") int id) {
         personDAO.delete(id);
         return "redirect:/people";
-
     }
-
 }

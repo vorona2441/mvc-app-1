@@ -11,6 +11,7 @@
         <p th:text="${person.getId()}">ID</p>
         <p th:text="${person.getAge()}">AGE</p>
         <p th:text="${person.getEmail()}">Email</p>
+        <p th:text="${person.getAddress()}">Address</p>
         <hr>
         <a th:href="@{{id}/edit (id=${person.getId()})}">EDIT</a><br>
     </div>

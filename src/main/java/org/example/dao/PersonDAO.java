@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class PersonDAO {
@@ -29,17 +30,23 @@ public class PersonDAO {
                 .stream().findAny().orElse(null); //query возвращает нам список, поэтому нужно его преобразовать к 1 объекту или вернуть null
     }       // Возвращает объект optional
 
+    public Optional<Person> show(String email){
+        String sql = "SELECT * FROM person WHERE email = ?";
+        return jdbcTemplate.query(sql, new Object[]{email}, new BeanPropertyRowMapper<>(Person.class)).stream().findAny();
+    }
+
     public void save(Person person) {
-        jdbcTemplate.update("INSERT INTO person (name, age, email) VALUES (?,?,?)", new Object[]{person.getName(), person.getAge(), person.getEmail()});
+        jdbcTemplate.update("INSERT INTO person (name, age, email, address) VALUES (?,?,?,?)", new Object[]{person.getName(), person.getAge(), person.getEmail(), person.getAddress()});
     }
 
     public void update(int id, Person person) {
         String sql = "UPDATE public.person SET " +
                 "name = ?::character varying," +
                 "age = ?::integer," +
-                "email = ?::character varying " +
+                "email = ?::character varying,   " +
+                "address = ?::character varying " +
                 "WHERE id = ?;";
-        jdbcTemplate.update(sql, person.getName(), person.getAge(), person.getEmail(), id);
+        jdbcTemplate.update(sql, person.getName(), person.getAge(), person.getEmail(), person.getAddress(), id);
     }
 
     public void delete(int id) {
@@ -63,6 +70,7 @@ public class PersonDAO {
                 ps.setString(1, list.get(i).getName());
                 ps.setInt(2, list.get(i).getAge());
                 ps.setString(3, list.get(i).getEmail());
+                ps.setString(4, list.get(i).getAddress());
             }
             @Override
             public int getBatchSize() {
@@ -87,7 +95,7 @@ public class PersonDAO {
     private List<Person> create1000People(String methodName) {
         List<Person> list = new ArrayList<>(1000);
         for (int i = 0; i < 1000; i++) {
-            Person person = new Person(methodName + i, i, "test" + i + "@mail.ru");
+            Person person = new Person(methodName + i, i, "test" + i + "@mail.ru", i+"Address");
             list.add(person);
         }
         return list;

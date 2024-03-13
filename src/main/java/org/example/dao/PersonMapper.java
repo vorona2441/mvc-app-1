@@ -13,7 +13,8 @@ public class PersonMapper implements RowMapper<Person> {
                 rs.getInt(1),
                 rs.getString(2),
                 rs.getInt(3),
-                rs.getString(4)
+                rs.getString(4),
+                rs.getString(5)
         );
     }
 }
